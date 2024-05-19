@@ -10,7 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="recources\boxes.ico" />
+    <None Remove="Recources\boxes.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Recources\boxes.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,7 +23,20 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="EPPlus" Version="7.1.2" />
+    <PackageReference Include="MacroView.VSTO" Version="4.0.10" />
+    <PackageReference Include="MacroView.VSTO.Excel" Version="4.0.0" />
+    <PackageReference Include="MacroView.VSTO.WPF" Version="4.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.Office.Interop.Excel">
+      <HintPath>Microsoft.Office.Interop.Excel.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Recources\boxes.png" />
   </ItemGroup>
 </Project>

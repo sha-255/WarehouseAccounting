@@ -15,9 +15,9 @@ namespace WarehouseAccounting.Domain.Data
         }
 
         private string? material;
-        public string Material
+        public string? Material
         {
-            get => material.Normalize().Trim();
+            get => material?.Normalize().Trim();
             set => material = value;
         }
 

@@ -13,7 +13,7 @@ namespace WarehouseAccounting
         {
             Initialized += (s, e) => Settings.Apply();
             InitializeComponent();
-            MainFrame.Navigate(new Main());
+            MainFrame.Navigate(new Auth());
         }
     }
 }

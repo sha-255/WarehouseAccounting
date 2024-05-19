@@ -1,17 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Office.Interop.Excel;
 using System.Windows;
+using System.Windows.Controls;
 using WarehouseAccounting.Domain.Context;
-using WarehouseAccounting.Domain.Data;
-using Excel = Microsoft.Office.Interop.Excel;
 
 namespace WarehouseAccounting.Pages
 {
-    public partial class Main : System.Windows.Controls.Page
+    /// <summary>
+    /// Interaction logic for MaterialsForTheCountertop.xaml
+    /// </summary>
+    public partial class MaterialsForTheCountertop : Page
     {
-        AccessoriesContext cntx = new();
+        MaterialsForTheCountertopContext cntx = new();
 
-        public Main()
+        public MaterialsForTheCountertop()
         {
             InitializeComponent();
             ApplyView();
@@ -21,8 +22,8 @@ namespace WarehouseAccounting.Pages
             NGReport.Click += (s, e) => Report();
             TBNameSearch.TextChanged += (s, e) => OnSerchTextChanged();
 
+            NMain.Click += (s, e) => NavigationService.Navigate(new Main());
             NMFF.Click += (s, e) => NavigationService.Navigate(new MaterialsForTheManufactureOfFurniture());
-            NMFTC.Click += (s, e) => NavigationService.Navigate(new MaterialsForTheCountertop());
         }
 
         private void OnSerchTextChanged()
@@ -32,14 +33,14 @@ namespace WarehouseAccounting.Pages
                 ApplyView();
                 return;
             }
-            ApplyAccessoriesView(cntx.Accessories.Where(el => el.Name.Contains(TBNameSearch.Text)).ToListAsync());
+            ApplyAccessoriesView(cntx.MaterialsForTheCountertop.Where(el => el.Name.Contains(TBNameSearch.Text)).ToListAsync());
         }
 
         private void Report()
         {
             try
             {
-                cntx.Accessories.DisplayInExcel();
+                cntx.MaterialsForTheCountertop.DisplayInExcel();
             }
             catch
             {
@@ -47,16 +48,16 @@ namespace WarehouseAccounting.Pages
             }
         }
 
-        private void ApplyView() => ApplyAccessoriesView(cntx.Accessories.ToListAsync());
+        private void ApplyView() => ApplyAccessoriesView(cntx.MaterialsForTheCountertop.ToListAsync());
 
-        private async void ApplyAccessoriesView(Task<List<Accessorie>> readers)
+        private async void ApplyAccessoriesView(Task<List<Domain.Data.MaterialsForTheCountertop>> readers)
             => AccessoriesView.ItemsSource = await readers;
 
         private async void OnAdd()
         {
             try
             {
-                var dto = new Accessorie()
+                var dto = new Domain.Data.MaterialsForTheCountertop()
                 {
                     Id = null,
                     Name = AddName.Text,
@@ -65,7 +66,7 @@ namespace WarehouseAccounting.Pages
                     Quantity = int.Parse(AddQuantity.Text),
                     Warehouse = AddWarehouse.Text,
                 };
-                await cntx.Accessories.AddAsync(dto);
+                await cntx.MaterialsForTheCountertop.AddAsync(dto);
                 await cntx.SaveChangesAsync();
                 ApplyView();
             }
@@ -87,7 +88,7 @@ namespace WarehouseAccounting.Pages
         {
             try
             {
-                var dto = new Accessorie()
+                var dto = new Domain.Data.MaterialsForTheCountertop()
                 {
                     Id = int.Parse(UpdateId.Text),
                     Name = UpdateName.Text,
@@ -97,7 +98,7 @@ namespace WarehouseAccounting.Pages
                     Warehouse = UpdateWarehouse.Text,
                 };
                 cntx.ChangeTracker.Clear();
-                cntx.Accessories.Update(dto);
+                cntx.MaterialsForTheCountertop.Update(dto);
                 cntx.SaveChanges();
                 ApplyView();
             }
@@ -120,9 +121,9 @@ namespace WarehouseAccounting.Pages
         {
             try
             {
-                cntx.Accessories.Remove(cntx.Accessories.Find(Math.Abs(int.Parse(RemoveId.Text))));
+                cntx.MaterialsForTheCountertop.Remove(cntx.MaterialsForTheCountertop.Find(Math.Abs(int.Parse(RemoveId.Text))));
                 cntx.SaveChangesAsync();
-                AccessoriesView.ItemsSource = cntx.Accessories.ToList();
+                AccessoriesView.ItemsSource = cntx.MaterialsForTheCountertop.ToList();
             }
             catch (Exception ex)
             {
@@ -133,40 +134,5 @@ namespace WarehouseAccounting.Pages
                 RemoveId.Clear();
             }
         }
-    }
-}
-
-public static class CollectionsExtension
-{
-    public static void DisplayInExcel(this IEnumerable<Accessorie> data)
-    {
-        var excelApp = new Excel.Application();
-        excelApp.Visible = true;
-        excelApp.Workbooks.Add();
-        _Worksheet workSheet = (Worksheet)excelApp.ActiveSheet;
-        void DrawHeaders()
-        {
-            workSheet.Cells[1, "A"] = "Id";
-            workSheet.Cells[1, "B"] = "Name";
-            workSheet.Cells[1, "C"] = "Material";
-            workSheet.Cells[1, "D"] = "Price";
-            workSheet.Cells[1, "E"] = "Quantity";
-            workSheet.Cells[1, "F"] = "Warehouse";
-        }
-        DrawHeaders();
-        var row = 2;
-        foreach (var _ in data)
-        {
-            row++;
-            workSheet.Cells[row, "A"] = _.Id;
-            workSheet.Cells[row, "B"] = _.Name;
-            workSheet.Cells[row, "C"] = _.Material;
-            workSheet.Cells[row, "D"] = _.Price;
-            workSheet.Cells[row, "E"] = _.Quantity;
-            workSheet.Cells[row, "F"] = _.Warehouse;
-        }
-        workSheet.Columns.AutoFit();
-        workSheet.SaveAs(AppDomain.CurrentDomain.BaseDirectory);
-        excelApp.Quit();
     }
 }

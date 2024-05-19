@@ -5,6 +5,6 @@ namespace WarehouseAccounting.Domain.Context
 {
     public class MaterialsForFurnitureContext : CustomContext
     {
-        public DbSet<MaterialsForFurniture> MaterialsForFurnitures { get; set; }
+        public DbSet<MaterialsForFurniture> MaterialsForFurniture { get; set; }
     }
 }
