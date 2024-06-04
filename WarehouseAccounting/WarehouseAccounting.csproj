@@ -22,7 +22,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="EPPlus" Version="7.1.2" />
+    <PackageReference Include="EPPlus" Version="7.1.3" />
     <PackageReference Include="MacroView.VSTO" Version="4.0.10" />
     <PackageReference Include="MacroView.VSTO.Excel" Version="4.0.0" />
     <PackageReference Include="MacroView.VSTO.WPF" Version="4.0.6" />

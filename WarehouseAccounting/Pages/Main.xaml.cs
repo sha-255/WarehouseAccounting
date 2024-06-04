@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Office.Interop.Excel;
+using OfficeOpenXml;
 using System.Windows;
 using WarehouseAccounting.Domain.Context;
 using WarehouseAccounting.Domain.Data;
@@ -39,7 +40,36 @@ namespace WarehouseAccounting.Pages
         {
             try
             {
-                cntx.Accessories.DisplayInExcel();
+                var path = @$"C:\Users\_\Downloads\{nameof(cntx.Accessories)}.xlsx";
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                var list = new List<ReportData>
+                {
+                    new ReportData
+                    {
+                        Price = "123",
+                        Quantity = "321",
+                    },
+                    new ReportData
+                    {
+                        Price = "1234",
+                        Quantity = "3214",
+                    },
+                    new ReportData
+                    {
+                        Price = "1235",
+                        Quantity = "3215",
+                    },
+                };
+                var ls = cntx.Accessories.ToList();
+                if (TBNameSearch.Text != "")
+                {
+                    ls = cntx.Accessories.Where(el => el.Name.Contains(TBNameSearch.Text)).ToList();
+                }
+                using (var package = new ExcelPackage())
+                {
+                    package.Workbook.Worksheets.Add("Report").Cells[1, 1].LoadFromCollection(ls, true);
+                    package.SaveAs(new System.IO.FileInfo(path));
+                }
             }
             catch
             {
@@ -169,4 +199,10 @@ public static class CollectionsExtension
         workSheet.SaveAs(AppDomain.CurrentDomain.BaseDirectory);
         excelApp.Quit();
     }
+}
+
+public class ReportData
+{
+    public string Price { get; set; }
+    public string Quantity { get; set; }
 }
