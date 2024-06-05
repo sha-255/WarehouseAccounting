@@ -70,7 +70,7 @@
                     <Separator />
                     <Label/>
                     <DockPanel>
-                        <Label Content="Имя:" />
+                        <Label Content="Наименование:" />
                         <TextBox x:Name="AddName" />
                     </DockPanel>
                     <Label/>
@@ -122,7 +122,7 @@
                     </DockPanel>
                     <Label/>
                     <DockPanel>
-                        <Label Content="Имя:" />
+                        <Label Content="Наименование:" />
                         <TextBox x:Name="UpdateName" />
                     </DockPanel>
                     <Label/>
@@ -181,7 +181,7 @@
                         <Separator/>
                         <Label/>
                         <DockPanel>
-                            <Label Content="Имя"/>
+                            <Label Content="Наименование"/>
                             <TextBox x:Name="TBNameSearch"/>
                         </DockPanel>
                         <Label/>

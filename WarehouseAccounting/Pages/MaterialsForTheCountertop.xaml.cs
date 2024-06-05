@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 using System.Windows;
 using System.Windows.Controls;
+using WarehouseAccounting.Common;
 using WarehouseAccounting.Domain.Context;
 
 namespace WarehouseAccounting.Pages
@@ -40,11 +42,24 @@ namespace WarehouseAccounting.Pages
         {
             try
             {
-                cntx.MaterialsForTheCountertop.DisplayInExcel();
+                var path = @$"{Folders.GetPath(Folder.Downloads)}\{nameof(cntx.MaterialsForTheCountertop)}.xlsx";
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                var ls = cntx.MaterialsForTheCountertop.ToList();
+                if (TBNameSearch.Text != "")
+                {
+                    ls = cntx.MaterialsForTheCountertop.Where(el => el.Name.Contains(TBNameSearch.Text)).ToList();
+                }
+                using (var package = new ExcelPackage())
+                {
+                    package.Workbook.Worksheets.Add(nameof(Report)).Cells[1, 1].LoadFromCollection(ls, true);
+                    package.SaveAs(new System.IO.FileInfo(path));
+                }
+                var argument = "/select, \"" + path + "\"";
+                System.Diagnostics.Process.Start("explorer.exe", argument);
             }
             catch
             {
-                MessageBox.Show("Не удалось найти установленный Microsoft Office Excel", "Складской учёт", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Ошибка генерации отчёта", "Складской учёт", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

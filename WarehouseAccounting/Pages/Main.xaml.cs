@@ -2,6 +2,7 @@
 using Microsoft.Office.Interop.Excel;
 using OfficeOpenXml;
 using System.Windows;
+using WarehouseAccounting.Common;
 using WarehouseAccounting.Domain.Context;
 using WarehouseAccounting.Domain.Data;
 using Excel = Microsoft.Office.Interop.Excel;
@@ -40,26 +41,8 @@ namespace WarehouseAccounting.Pages
         {
             try
             {
-                var path = @$"C:\Users\_\Downloads\{nameof(cntx.Accessories)}.xlsx";
+                var path = @$"{Folders.GetPath(Folder.Downloads)}\{nameof(cntx.Accessories)}.xlsx";
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-                var list = new List<ReportData>
-                {
-                    new ReportData
-                    {
-                        Price = "123",
-                        Quantity = "321",
-                    },
-                    new ReportData
-                    {
-                        Price = "1234",
-                        Quantity = "3214",
-                    },
-                    new ReportData
-                    {
-                        Price = "1235",
-                        Quantity = "3215",
-                    },
-                };
                 var ls = cntx.Accessories.ToList();
                 if (TBNameSearch.Text != "")
                 {
@@ -67,13 +50,15 @@ namespace WarehouseAccounting.Pages
                 }
                 using (var package = new ExcelPackage())
                 {
-                    package.Workbook.Worksheets.Add("Report").Cells[1, 1].LoadFromCollection(ls, true);
+                    package.Workbook.Worksheets.Add(nameof(Report)).Cells[1, 1].LoadFromCollection(ls, true);
                     package.SaveAs(new System.IO.FileInfo(path));
                 }
+                var argument = "/select, \"" + path + "\"";
+                System.Diagnostics.Process.Start("explorer.exe", argument);
             }
             catch
             {
-                MessageBox.Show("Не удалось найти установленный Microsoft Office Excel", "Складской учёт", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Ошибка генерации отчёта", "Складской учёт", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -199,10 +184,4 @@ public static class CollectionsExtension
         workSheet.SaveAs(AppDomain.CurrentDomain.BaseDirectory);
         excelApp.Quit();
     }
-}
-
-public class ReportData
-{
-    public string Price { get; set; }
-    public string Quantity { get; set; }
 }
