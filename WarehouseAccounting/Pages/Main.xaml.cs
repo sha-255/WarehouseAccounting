@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Office.Interop.Excel;
+﻿using Microsoft.Office.Interop.Excel;
 using OfficeOpenXml;
 using System.Windows;
 using WarehouseAccounting.Common;
@@ -12,6 +11,7 @@ namespace WarehouseAccounting.Pages
     public partial class Main : System.Windows.Controls.Page
     {
         AccessoriesContext cntx = new();
+        AccessoriesContext cntxRead = new();
 
         public Main()
         {
@@ -34,7 +34,7 @@ namespace WarehouseAccounting.Pages
                 ApplyView();
                 return;
             }
-            ApplyAccessoriesView(cntx.Accessories.Where(el => el.Name.Contains(TBNameSearch.Text)).ToListAsync());
+            ApplyAccessoriesView(cntx.Accessories.Where(el => el.Name.Contains(TBNameSearch.Text)).ToList());
         }
 
         private void Report()
@@ -62,10 +62,10 @@ namespace WarehouseAccounting.Pages
             }
         }
 
-        private void ApplyView() => ApplyAccessoriesView(cntx.Accessories.ToListAsync());
+        private void ApplyView() => ApplyAccessoriesView(cntxRead.Accessories.ToList());
 
-        private async void ApplyAccessoriesView(Task<List<Accessorie>> readers)
-            => AccessoriesView.ItemsSource = await readers;
+        private void ApplyAccessoriesView(List<Accessorie> readers)
+            => AccessoriesView.ItemsSource = readers;
 
         private async void OnAdd()
         {
@@ -75,14 +75,13 @@ namespace WarehouseAccounting.Pages
                 {
                     Id = null,
                     Name = AddName.Text,
-                    Material = AddMaterial.SelectedValue.ToString(),
+                    Material = AddMaterial.SelectedValue.ToString()?.Split(":")[1].Normalize().Trim(),
                     Price = int.Parse(AddPrice.Text),
                     Quantity = int.Parse(AddQuantity.Text),
                     Warehouse = AddWarehouse.Text,
                 };
                 await cntx.Accessories.AddAsync(dto);
                 await cntx.SaveChangesAsync();
-                ApplyView();
             }
             catch
             {
@@ -90,6 +89,7 @@ namespace WarehouseAccounting.Pages
             }
             finally
             {
+                ApplyView();
                 AddName.Clear();
                 AddMaterial.SelectedIndex = -1;
                 AddPrice.Clear();
@@ -106,7 +106,7 @@ namespace WarehouseAccounting.Pages
                 {
                     Id = int.Parse(UpdateId.Text),
                     Name = UpdateName.Text,
-                    Material = UpdateMaterial.SelectedValue.ToString(),
+                    Material = UpdateMaterial.SelectedValue.ToString()?.Split(":")[1].Normalize().Trim(),
                     Price = int.Parse(UpdatePrice.Text),
                     Quantity = int.Parse(UpdateQuantity.Text),
                     Warehouse = UpdateWarehouse.Text,
@@ -114,7 +114,6 @@ namespace WarehouseAccounting.Pages
                 cntx.ChangeTracker.Clear();
                 cntx.Accessories.Update(dto);
                 cntx.SaveChanges();
-                ApplyView();
             }
             catch (Exception ex)
             {
@@ -122,6 +121,7 @@ namespace WarehouseAccounting.Pages
             }
             finally
             {
+                ApplyView();
                 UpdateId.Clear();
                 UpdateName.Clear();
                 UpdateMaterial.SelectedIndex = -1;
@@ -135,16 +135,18 @@ namespace WarehouseAccounting.Pages
         {
             try
             {
-                cntx.Accessories.Remove(cntx.Accessories.Find(Math.Abs(int.Parse(RemoveId.Text))));
+                var accessorie = cntx.Accessories.Find(Math.Abs(int.Parse(RemoveId.Text)));
+                if (accessorie == null) throw new Exception();
+                cntx.Accessories.Remove(accessorie);
                 cntx.SaveChangesAsync();
-                AccessoriesView.ItemsSource = cntx.Accessories.ToList();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Неверно заполнены данные" + ex.Message, "Складской учёт", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Неверно заполнены данные" + ex.Message + RemoveId.Text, "Складской учёт", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {
+                ApplyView();
                 RemoveId.Clear();
             }
         }
