@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using OfficeOpenXml;
+﻿using OfficeOpenXml;
 using System.Windows;
 using System.Windows.Controls;
 using WarehouseAccounting.Common;
@@ -36,7 +35,7 @@ namespace WarehouseAccounting.Pages
                 ApplyView();
                 return;
             }
-            ApplyAccessoriesView(cntx.MaterialsForFurniture.Where(el => el.Name.Contains(TBNameSearch.Text)).ToListAsync());
+            ApplyAccessoriesView(cntx.MaterialsForFurniture.Where(el => el.Name.Contains(TBNameSearch.Text)).ToList());
         }
 
         private void Report()
