@@ -143,7 +143,7 @@ namespace WarehouseAccounting.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Неверно заполнены данные" + ex.Message + RemoveId.Text, "Складской учёт", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Неверно заполнены данные:" + ex.Message + RemoveId.Text, "Складской учёт", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {

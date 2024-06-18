@@ -64,10 +64,10 @@ namespace WarehouseAccounting.Pages
             }
         }
 
-        private void ApplyView() => ApplyAccessoriesView(cntx.MaterialsForFurniture.ToListAsync());
+        private void ApplyView() => ApplyAccessoriesView(cntx.MaterialsForFurniture.ToList());
 
-        private async void ApplyAccessoriesView(Task<List<MaterialsForFurniture>> readers)
-            => AccessoriesView.ItemsSource = await readers;
+        private void ApplyAccessoriesView(List<MaterialsForFurniture> readers)
+            => AccessoriesView.ItemsSource = readers;
 
         private async void OnAdd()
         {
@@ -139,11 +139,10 @@ namespace WarehouseAccounting.Pages
             {
                 cntx.MaterialsForFurniture.Remove(cntx.MaterialsForFurniture.Find(Math.Abs(int.Parse(RemoveId.Text))));
                 cntx.SaveChangesAsync();
-                AccessoriesView.ItemsSource = cntx.MaterialsForFurniture.ToList();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Неверно заполнены данные" + ex.Message, "Складской учёт", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Неверно заполнены данные:" + ex.Message, "Складской учёт", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {
