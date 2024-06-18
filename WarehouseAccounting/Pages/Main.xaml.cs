@@ -25,6 +25,7 @@ namespace WarehouseAccounting.Pages
 
             NMFF.Click += (s, e) => NavigationService.Navigate(new MaterialsForTheManufactureOfFurniture());
             NMFTC.Click += (s, e) => NavigationService.Navigate(new MaterialsForTheCountertop());
+            NMAM.Click += (s, e) => NavigationService.Navigate(new AllMaterials());
         }
 
         private void OnSerchTextChanged()

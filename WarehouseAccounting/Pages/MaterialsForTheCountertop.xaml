@@ -19,6 +19,7 @@
                 <MenuItem x:Name="NMain" Header="Фурнитура"/>
                 <MenuItem x:Name="NMFF" Header="Материалы для изготовления мебели"/>
                 <!--<MenuItem x:Name="NMFTC" Header="Материалы для cтолешницы"/>-->
+                <MenuItem x:Name="NMAM" Header="Все материалы"/>
             </MenuItem>
             <MenuItem Header="Отчёты" >
                 <MenuItem x:Name="NGReport" Header="Сформировать отчёт по текущей таблице"/>
