@@ -108,7 +108,7 @@
                     <Grid>
                         <Expander>
                             <Expander.Header>
-                                <Button>Матриалы для столешницы</Button>
+                                <Button>Материалы для столешницы</Button>
                             </Expander.Header>
                             <StackPanel>
                                 <DockPanel>
