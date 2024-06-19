@@ -91,6 +91,12 @@
                             <ComboBoxItem>
                                 Железо
                             </ComboBoxItem>
+                            <ComboBoxItem>
+                                Дерево
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                Камень
+                            </ComboBoxItem>
                         </ComboBox>
                     </DockPanel>
                     <Label/>
@@ -142,6 +148,12 @@
                             </ComboBoxItem>
                             <ComboBoxItem>
                                 Железо
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                Дерево
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                Камень
                             </ComboBoxItem>
                         </ComboBox>
                     </DockPanel>
